@@ -1,0 +1,542 @@
+:root {
+      --bg:        #faf7f2;   /* Warna latar belakang utama           */
+      --surface:   #ffffff;   /* Warna kartu/card                     */
+      --ink:       #1a1410;   /* Warna teks utama                     */
+      --muted:     #7a6f65;   /* Warna teks sekunder/abu-abu          */
+      --accent:    #c8522a;   /* Warna aksen/highlight (oranye-merah) */
+      --accent-lt: #f0ddd5;   /* Warna aksen muda untuk latar badge   */
+      --border:    #e8e0d6;   /* Warna garis batas/border             */
+      --wa:        #25d366;   /* Warna hijau WhatsApp                 */
+      --wa-dark:   #1aab55;   /* Warna hijau WA saat hover            */
+      --radius:    16px;      /* Sudut melengkung kartu               */
+      --shadow:    0 4px 24px rgba(26,20,16,.08); /* Bayangan kartu   */
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250,247,242,.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px); /* Safari support */
+      border-bottom: 1px solid var(--border);
+      padding: 0 5vw;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 72px;
+      transition: height .2s;
+    }
+    /* ── NAV LOGO: ikon + teks nama toko berdampingan ── */
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px; /* logo & teks sejajar */
+      text-decoration: none; flex-shrink: 0;
+    }
+
+    /* Gambar ikon logo */
+    .nav-logo-img {
+      height: 52px;     /* ← Ubah untuk perbesar/perkecil ikon */
+      width: 52px;
+      max-width: none;
+      display: block;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    /* Nama toko di sebelah kanan ikon */
+    .nav-logo-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 900;
+      color: var(--ink); letter-spacing: -.5px;
+      line-height: 1;
+    }
+    .nav-logo-name span { color: var(--accent); } /* angka "22" warna aksen */
+
+    /* Fallback teks jika ikon gagal dimuat */
+    .nav-logo-fallback { display: none; }
+    .nav-logo-img.error { display: none; }
+    /* Jika ikon error, sembunyikan gap tambahan */
+    .nav-logo-img.error + .nav-logo-name { margin-left: 0; }
+    .nav-wa {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--wa); color: #fff;
+      text-decoration: none; font-weight: 500; font-size: .85rem;
+      padding: 8px 16px; border-radius: 100px;
+      transition: background .2s;
+    }
+    .nav-wa:hover { background: var(--wa-dark); }
+    .nav-wa svg { width: 16px; height: 16px; fill: #fff; }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 70px 5vw 50px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, #f5e8e0 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 6vw, 3.8rem);
+      line-height: 1.1; font-weight: 900;
+      max-width: 700px; margin: 0 auto 16px;
+    }
+    .hero p {
+      color: var(--muted); font-size: 1rem;
+      max-width: 460px; margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ================================================================
+       TOOLBAR: SEARCH + FILTER KATEGORI
+       ================================================================ */
+    .toolbar {
+      padding: 28px 5vw 0;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+
+    /* -- Search bar -- */
+    .search-wrap {
+      position: relative; max-width: 480px; width: 100%;
+    }
+    .search-wrap svg {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      width: 18px; height: 18px; pointer-events: none; color: var(--muted);
+    }
+    #searchInput {
+      width: 100%; padding: 11px 16px 11px 42px;
+      border: 1.5px solid var(--border);
+      border-radius: 100px; background: var(--surface);
+      font-family: inherit; font-size: .9rem; color: var(--ink);
+      outline: none; transition: border-color .2s, box-shadow .2s;
+    }
+    #searchInput:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-lt);
+    }
+    #searchInput::placeholder { color: var(--muted); }
+
+    /* -- Wrapper kategori: scroll horizontal di HP, wrap di layar lebar --
+       Dibuat otomatis dari data produk, tidak perlu diedit manual */
+    .cat-wrap {
+      display: flex;
+      flex-wrap: nowrap;          /* HP: scroll horizontal, tidak turun baris */
+      gap: 8px; align-items: center;
+      overflow-x: auto;           /* HP: geser kanan-kiri jika pilihan banyak */
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;      /* Sembunyikan scrollbar (Firefox) */
+      padding-bottom: 4px;        /* Ruang agar shadow tombol tidak terpotong */
+    }
+    .cat-wrap::-webkit-scrollbar { display: none; } /* Sembunyikan scrollbar (Chrome/Safari) */
+
+    .cat-pill {
+      padding: 7px 18px; border-radius: 100px;
+      border: 1.5px solid var(--border);
+      background: var(--surface); color: var(--ink);
+      font-family: inherit; font-size: .82rem; font-weight: 500;
+      cursor: pointer; transition: all .18s;
+      white-space: nowrap; flex-shrink: 0; /* Tombol tidak menyusut/terpecah */
+    }
+    .cat-pill:hover { border-color: var(--accent); color: var(--accent); }
+    .cat-pill.active {
+      background: var(--accent); color: #fff; border-color: var(--accent);
+    }
+
+    /* ── SECTION ── */
+    .section { padding: 24px 5vw 80px; }
+    .section-header {
+      display: flex; align-items: baseline; justify-content: space-between;
+      flex-wrap: wrap; gap: 4px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 14px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 700;
+    }
+    .section-count { color: var(--muted); font-size: .88rem; }
+
+    /* ── GRID ── */
+    .grid {
+      display: grid;
+      /* Default: 2 kolom minimum, menyesuaikan layar otomatis */
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+      gap: 22px;
+    }
+
+    /* ── EMPTY STATE (tidak ada hasil) ── */
+    .empty {
+      grid-column: 1 / -1;
+      text-align: center; padding: 60px 20px; color: var(--muted);
+    }
+    .empty-icon { font-size: 3rem; margin-bottom: 12px; }
+    .empty h3 {
+      font-family: 'Playfair Display', serif; font-size: 1.2rem;
+      margin-bottom: 6px; color: var(--ink);
+    }
+    .empty p { font-size: .88rem; line-height: 1.6; }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+      transition: transform .25s, box-shadow .25s;
+      display: flex; flex-direction: column;
+    }
+    .card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+
+    .card-img-wrap {
+      position: relative; aspect-ratio: 4/3;
+      background: var(--bg); overflow: hidden;
+    }
+    .card-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .4s;
+    }
+    .card:hover .card-img-wrap img { transform: scale(1.05); }
+
+    /* Badge promo (kiri atas) */
+    .badge {
+      position: absolute; top: 12px; left: 12px; color: #fff;
+      font-size: .72rem; font-weight: 700; letter-spacing: .04em;
+      text-transform: uppercase; padding: 3px 10px; border-radius: 100px;
+    }
+    .badge.hot { background: var(--accent); }
+    .badge.new { background: #2a7cc8; }
+
+    /* Badge kategori (kanan atas) */
+    .cat-badge {
+      position: absolute; top: 12px; right: 12px;
+      background: rgba(0,0,0,.45); color: #fff;
+      backdrop-filter: blur(4px);
+      font-size: .68rem; font-weight: 600; letter-spacing: .03em;
+      padding: 3px 9px; border-radius: 100px; text-transform: uppercase;
+    }
+
+    .card-body { padding: 18px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+    .card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem; font-weight: 700; line-height: 1.3;
+    }
+    .card-desc { font-size: .875rem; color: var(--muted); line-height: 1.6; flex: 1; }
+    .card-meta {
+      display: flex; align-items: center; justify-content: space-between; margin-top: 4px;
+    }
+    .card-price { font-weight: 700; font-size: 1.1rem; color: var(--accent); }
+    .card-stock  { font-size: .78rem; color: var(--muted); }
+
+    .btn-buy {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      background: var(--wa); color: #fff; border: none; border-radius: 10px;
+      padding: 12px; width: 100%; font-family: inherit;
+      font-size: .88rem; font-weight: 600; cursor: pointer;
+      transition: background .2s, transform .15s;
+      text-decoration: none; margin-top: 4px;
+    }
+    .btn-buy:hover { background: var(--wa-dark); transform: scale(1.02); }
+    .btn-buy svg { width: 17px; height: 17px; fill: #fff; flex-shrink: 0; }
+
+    /* ── BANNER ── */
+    .banner {
+      margin: 0 5vw 60px; background: var(--ink);
+      border-radius: var(--radius); padding: 40px 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 20px; flex-wrap: wrap;
+      position: relative; overflow: hidden;
+    }
+    /* Banner tombol full-width saat wrap */
+    @media (max-width: 767px) {
+      .banner { flex-direction: column; align-items: stretch; }
+      .banner-btn { justify-content: center; }
+    }
+    .banner::after {
+      content: '★'; position: absolute; right: 5%; top: 50%; transform: translateY(-50%);
+      font-size: 12rem; opacity: .04; color: #fff; pointer-events: none; line-height: 1;
+    }
+    .banner-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; color: #fff; font-weight: 900; margin-bottom: 8px;
+    }
+    .banner-text p { color: #a09488; font-size: .9rem; line-height: 1.6; }
+    .banner-btn {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--wa); color: #fff; padding: 14px 28px; border-radius: 12px;
+      text-decoration: none; font-weight: 600; font-size: .95rem;
+      transition: background .2s; white-space: nowrap;
+    }
+    .banner-btn:hover { background: var(--wa-dark); }
+    .banner-btn svg { width: 20px; height: 20px; fill: #fff; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 32px 5vw;
+      border-top: 1px solid var(--border);
+      color: var(--muted); font-size: .85rem;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: var(--ink); color: #fff; padding: 12px 24px; border-radius: 100px;
+      font-size: .9rem; font-weight: 500; box-shadow: 0 8px 32px rgba(0,0,0,.2);
+      transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity .35s;
+      opacity: 0; pointer-events: none; white-space: nowrap; z-index: 999;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    /* ================================================================
+       PAGINATION — Navigasi halaman produk
+       Muncul otomatis hanya jika produk lebih dari PRODUCTS_PER_PAGE
+       ================================================================ */
+    .pagination {
+      display: flex; align-items: center; justify-content: center;
+      gap: 6px; padding: 0 0 48px; flex-wrap: wrap;
+    }
+    .pagination.hidden { display: none; }
+
+    /* Tombol Prev / Next */
+    .pg-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 9px 18px; border-radius: 100px;
+      border: 1.5px solid var(--border);
+      background: var(--surface); color: var(--ink);
+      font-family: inherit; font-size: .85rem; font-weight: 500;
+      cursor: pointer; transition: all .18s; white-space: nowrap;
+    }
+    .pg-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+    .pg-btn:disabled { opacity: .35; cursor: not-allowed; }
+    .pg-btn svg {
+      width: 15px; height: 15px; stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0;
+    }
+
+    /* Tombol nomor halaman */
+    .pg-num {
+      min-width: 38px; height: 38px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 10px; border: 1.5px solid var(--border);
+      background: var(--surface); color: var(--ink);
+      font-family: inherit; font-size: .85rem; font-weight: 500;
+      cursor: pointer; transition: all .18s;
+    }
+    .pg-num:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+    .pg-num.active {
+      background: var(--accent); color: #fff;
+      border-color: var(--accent); font-weight: 700;
+    }
+
+    /* Titik-titik (...) antar halaman */
+    .pg-dots {
+      min-width: 32px; text-align: center;
+      color: var(--muted); font-size: .9rem; line-height: 38px;
+    }
+
+    /* ================================================================
+       RESPONSIVE — Breakpoint untuk semua ukuran layar
+       ─────────────────────────────────────────────
+       xs  : < 400px   → HP kecil / lama
+       sm  : 400–639px → HP biasa
+       md  : 640–767px → HP besar / phablet
+       lg  : 768–1023px→ Tablet
+       xl  : ≥ 1024px  → Laptop / Desktop
+       ================================================================ */
+
+    /* ── XS: HP kecil (< 400px) ── */
+    @media (max-width: 399px) {
+      /* Navbar: logo lebih kecil, tombol WA hanya ikon */
+      nav { height: 56px; padding: 0 4vw; }
+      .nav-logo { gap: 6px; }
+      .nav-logo-img { height: 38px; max-width: 46px; }
+      .nav-logo-name { font-size: 1rem; }
+      .nav-wa { padding: 7px 10px; font-size: 0; gap: 0; border-radius: 50%; width: 36px; height: 36px; justify-content: center; }
+      .nav-wa svg { width: 18px; height: 18px; margin: 0; }
+
+      /* Hero */
+      .hero { padding: 40px 4vw 28px; }
+      .hero h1 { font-size: 1.7rem; }
+      .hero p  { font-size: .88rem; }
+
+      /* Toolbar */
+      .toolbar { padding: 20px 4vw 0; gap: 12px; }
+      #searchInput { font-size: .85rem; padding: 10px 14px 10px 38px; }
+      .cat-pill { font-size: .78rem; padding: 6px 13px; }
+
+      /* Grid: 1 kolom */
+      .section { padding: 18px 4vw 60px; }
+      .grid { grid-template-columns: 1fr; gap: 16px; }
+
+      /* Kartu */
+      .card-body { padding: 14px; }
+      .card-name { font-size: 1rem; }
+      .btn-buy   { font-size: .85rem; padding: 11px; }
+
+      /* Banner */
+      .banner { margin: 0 4vw 40px; padding: 28px 5%; flex-direction: column; align-items: flex-start; }
+      .banner::after { display: none; }
+      .banner-text h2 { font-size: 1.4rem; }
+      .banner-btn { width: 100%; justify-content: center; }
+
+      /* Pagination */
+      .pagination { gap: 4px; padding-bottom: 36px; }
+      .pg-btn span { display: none; }
+      .pg-btn { padding: 8px 10px; }
+      .pg-num { min-width: 32px; height: 32px; font-size: .8rem; }
+
+      /* Section header */
+      .section-header { flex-direction: column; gap: 4px; }
+      .section-title { font-size: 1.3rem; }
+
+      /* Footer */
+      footer { padding: 24px 4vw; font-size: .8rem; }
+    }
+
+    /* ── SM: HP biasa (400–639px) ── */
+    @media (min-width: 400px) and (max-width: 639px) {
+      /* Navbar */
+      nav { height: 60px; padding: 0 5vw; }
+      .nav-logo-img { height: 40px; max-width: 50px; }
+      .nav-logo-name { font-size: 1.1rem; }
+      .nav-wa { font-size: .82rem; padding: 8px 14px; }
+
+      /* Hero */
+      .hero { padding: 50px 5vw 36px; }
+      .hero h1 { font-size: clamp(1.85rem, 7vw, 2.4rem); }
+      .hero p  { font-size: .92rem; }
+
+      /* Toolbar */
+      .toolbar { padding: 22px 5vw 0; gap: 12px; }
+      .search-wrap { max-width: 100%; }
+      .cat-pill { font-size: .8rem; }
+
+      /* Grid: 1 kolom */
+      .section { padding: 20px 5vw 60px; }
+      .grid { grid-template-columns: 1fr; gap: 18px; }
+
+      /* Banner */
+      .banner { margin: 0 5vw 48px; padding: 30px 6%; flex-direction: column; align-items: flex-start; }
+      .banner::after { display: none; }
+      .banner-text h2 { font-size: 1.55rem; }
+      .banner-btn { width: 100%; justify-content: center; }
+
+      /* Section header */
+      .section-header { flex-direction: column; gap: 4px; }
+
+      /* Pagination */
+      .pg-btn span { display: none; }
+      .pg-btn { padding: 8px 12px; }
+    }
+
+    /* ── MD: HP besar / phablet (640–767px) ── */
+    @media (min-width: 640px) and (max-width: 767px) {
+      /* Navbar */
+      nav { height: 62px; }
+      .nav-logo-img { height: 44px; max-width: 54px; }
+      .nav-logo-name { font-size: 1.15rem; }
+
+      /* Hero */
+      .hero { padding: 56px 5vw 40px; }
+
+      /* Toolbar */
+      .toolbar { padding: 24px 5vw 0; }
+      .search-wrap { max-width: 100%; }
+
+      /* Grid: 2 kolom */
+      .section { padding: 22px 5vw 70px; }
+      .grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+
+      /* Banner */
+      .banner { margin: 0 5vw 52px; padding: 32px 5%; flex-direction: column; align-items: flex-start; }
+      .banner::after { display: none; }
+      .banner-btn { width: 100%; justify-content: center; }
+
+      /* Section header */
+      .section-header { flex-direction: column; gap: 4px; }
+
+      /* Pagination */
+      .pg-btn span { display: none; }
+    }
+
+    /* ── LG: Tablet (768–1023px) ── */
+    @media (min-width: 768px) and (max-width: 1023px) {
+      /* Navbar */
+      .nav-logo-img { height: 46px; max-width: 56px; }
+
+      /* Hero */
+      .hero { padding: 64px 5vw 48px; }
+
+      /* Toolbar */
+      .toolbar { padding: 26px 5vw 0; flex-direction: row; align-items: center; flex-wrap: wrap; gap: 12px; }
+      .search-wrap { max-width: 340px; }
+      .cat-wrap { flex: 1; }
+
+      /* Grid: 2–3 kolom otomatis */
+      .grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+
+      /* Banner */
+      .banner { margin: 0 5vw 56px; }
+      .banner-text h2 { font-size: 1.65rem; }
+
+      /* Section header */
+      .section-header { flex-direction: row; }
+    }
+
+    /* ── XL: Desktop / Laptop (≥ 1024px) ── */
+    @media (min-width: 1024px) {
+      /* Navbar */
+      nav { height: 68px; padding: 0 6vw; }
+      .nav-logo-img { height: 54px; max-width: 66px; }
+      .nav-logo-name { font-size: 1.4rem; }
+
+      /* Hero */
+      .hero { padding: 80px 6vw 60px; }
+
+      /* Toolbar */
+      .toolbar { padding: 30px 6vw 0; flex-direction: row; align-items: center; gap: 14px; flex-wrap: wrap; }
+      .search-wrap { max-width: 400px; }
+      .cat-wrap { flex: 1; }
+
+      /* Grid: 3–4 kolom */
+      .section { padding: 28px 6vw 90px; }
+      .grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
+
+      /* Banner */
+      .banner { margin: 0 6vw 64px; }
+    }
+
+    /* ── 2XL: Layar lebar (≥ 1400px) ── */
+    @media (min-width: 1400px) {
+      nav { padding: 0 8vw; }
+      .hero { padding: 90px 8vw 64px; }
+      .toolbar { padding: 32px 8vw 0; }
+      .section { padding: 30px 8vw 100px; }
+      .banner { margin: 0 8vw 72px; }
+      footer { padding: 36px 8vw; }
+      .grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+    }
+
+    /* ── TOUCH: Hapus hover pada layar sentuh ── */
+    @media (hover: none) {
+      .card:hover { transform: none; box-shadow: none; }
+      .card:hover .card-img-wrap img { transform: none; }
+      .btn-buy:hover { transform: none; }
+    }
+
+    /* ── PRINT: Tampilan cetak ── */
+    @media print {
+      nav, .toolbar, .pagination, .banner, .btn-buy, footer { display: none !important; }
+      .grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+      .card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+    }
