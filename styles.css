@@ -269,7 +269,7 @@
       font-family: 'Playfair Display', serif;
       font-size: 1.8rem; color: #fff; font-weight: 900; margin-bottom: 8px;
     }
-    .banner-text p { color: #a09488; font-size: .9rem; line-height: 1.6; }
+    .banner-text p { color: #ffffff; font-size: .9rem; line-height: 1.6; }
     .banner-btn {
       display: flex; align-items: center; gap: 10px;
       background: var(--wa); color: #fff; padding: 14px 28px; border-radius: 12px;
