@@ -262,7 +262,7 @@
       .banner-btn { justify-content: center; }
     }
     .banner::after {
-      content: '★'; position: absolute; right: 5%; top: 50%; transform: translateY(-50%);
+      content: ''; position: absolute; right: 5%; top: 50%; transform: translateY(-50%);
       font-size: 12rem; opacity: .04; color: #fff; pointer-events: none; line-height: 1;
     }
     .banner-text h2 {
