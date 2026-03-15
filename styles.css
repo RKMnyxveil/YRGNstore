@@ -1,6 +1,6 @@
 :root {
-      --bg:        #faf7f2;   /* Warna latar belakang utama           */
-      --surface:   #ffffff;   /* Warna kartu/card                     */
+      --bg:        #ffffff;   /* Warna latar belakang utama           */
+      --surface:   #e0e0e0;   /* Warna kartu/card                     */
       --ink:       #1a1410;   /* Warna teks utama                     */
       --muted:     #7a6f65;   /* Warna teks sekunder/abu-abu          */
       --accent:    #c8522a;   /* Warna aksen/highlight (oranye-merah) */
@@ -9,7 +9,7 @@
       --wa:        #25d366;   /* Warna hijau WhatsApp                 */
       --wa-dark:   #1aab55;   /* Warna hijau WA saat hover            */
       --radius:    16px;      /* Sudut melengkung kartu               */
-      --shadow:    0 4px 24px rgba(26,20,16,.08); /* Bayangan kartu   */
+      --shadow:    0 4px 24px rgba(27, 27, 27, 0.772); /* Bayangan kartu   */
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
