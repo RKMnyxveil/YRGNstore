@@ -250,7 +250,7 @@
 
     /* ── BANNER ── */
     .banner {
-      margin: 0 5vw 60px; background:#ccc;
+      margin: 0 5vw 60px; background:#8a8888;
       border-radius: var(--radius); padding: 40px 5%;
       display: flex; align-items: center; justify-content: space-between;
       gap: 20px; flex-wrap: wrap;
