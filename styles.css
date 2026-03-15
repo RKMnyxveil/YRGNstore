@@ -5,11 +5,11 @@
       --muted:     #7a6f65;   /* Warna teks sekunder/abu-abu          */
       --accent:    #c8522a;   /* Warna aksen/highlight (oranye-merah) */
       --accent-lt: #f0ddd5;   /* Warna aksen muda untuk latar badge   */
-      --border:    #e8e0d6;   /* Warna garis batas/border             */
+      --border:    #4b4b4b;   /* Warna garis batas/border             */
       --wa:        #25d366;   /* Warna hijau WhatsApp                 */
       --wa-dark:   #1aab55;   /* Warna hijau WA saat hover            */
       --radius:    16px;      /* Sudut melengkung kartu               */
-      --shadow:    0 4px 24px rgba(26,20,16,.08); /* Bayangan kartu   */
+      --shadow:    0 4px 24px rgb(26, 20, 16); /* Bayangan kartu   */
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,7 +24,7 @@
     /* ── NAV ── */
     nav {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(255, 255, 255, 0.92);
+      background: rgb(255, 255, 255);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px); /* Safari support */
       border-bottom: 1px solid var(--border);
