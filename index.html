@@ -1,463 +1,274 @@
-<!--
-  ╔══════════════════════════════════════════════════════════════════╗
-  ║                      TOKO ONLINE SEDERHANA                      ║
-  ║              Dibuat untuk deploy via GitHub Pages               ║
-  ╠══════════════════════════════════════════════════════════════════╣
-  ║  CARA KUSTOMISASI:                                              ║
-  ║  1. Ganti ADMIN_WA  → nomor WhatsApp admin (format: 628xxx)    ║
-  ║  2. Ganti TOKO_NAMA → nama toko kamu                           ║
-  ║  3. Edit array products[] → tambah/hapus/edit produk            ║
-  ║  4. Tambah kategori baru di field category setiap produk        ║
-  ║  5. Ganti URL gambar img: '...' dengan foto produk kamu         ║
-  ╠══════════════════════════════════════════════════════════════════╣
-  ║  CARA DEPLOY KE GITHUB PAGES:                                   ║
-  ║  1. Buat repo baru di github.com                                ║
-  ║  2. Upload file index.html ini ke repo                          ║
-  ║  3. Buka Settings → Pages → Source: Branch main / (root)       ║
-  ║  4. Akses di: https://username.github.io/nama-repo/            ║
-  ╚══════════════════════════════════════════════════════════════════╝
--->
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>YRGN22 — Belanja Mudah & Cepat</title>
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css"/>
 
 </head>
 <body>
 
-<!-- ── NAV ── -->
-<nav>
-  <!--
-    ╔══════════════════════════════════════════════════════════════╗
-    ║  CARA PASANG LOGO GAMBAR                                    ║
-    ╠══════════════════════════════════════════════════════════════╣
-    ║  1. Siapkan file logo kamu (PNG/JPG, disarankan PNG          ║
-    ║     transparan agar rapi di semua background)                ║
-    ║  2. Beri nama file: logo.png  (atau logo.jpg)                ║
-    ║  3. Upload file tersebut ke ROOT repo GitHub kamu            ║
-    ║     (sejajar dengan file index.html ini)                     ║
-    ║  4. Ganti src="logo.png" di bawah sesuai nama file kamu      ║
-    ║                                                              ║
-    ║  Struktur repo yang benar:                                   ║
-    ║    ├── index.html                                            ║
-    ║    └── logo.png   ← file logo di sini                       ║
-    ║                                                              ║
-    ║  Jika logo ada di subfolder:                                 ║
-    ║    src="images/logo.png"                                     ║
-    ║                                                              ║
-    ║  Ukuran logo: ubah height di CSS .nav-logo-img               ║
-    ║  (Default: 38px — cocok untuk navbar tinggi 64px)            ║
-    ╚══════════════════════════════════════════════════════════════╝
-  -->
-  <!--
-    LOGO NAVBAR: ikon + teks nama toko berdampingan
-    ─────────────────────────────────────────────────
-    Ganti ikon:  ubah src di <img class="nav-logo-img"> ke path file kamu
-                 contoh: src="logo.png"  atau  src="images/logo.png"
-    Ganti nama:  ubah teks "YRGN" dan angka "22" di span.nav-logo-name
-    Ubah ukuran: cari .nav-logo-img di CSS → ubah nilai height
-  -->
-  <a class="nav-logo" href="#">
-    <!-- Ikon logo (data URI tertanam — selalu tampil tanpa file eksternal) -->
-    <!--
-      src="logo.png" → GANTI dengan nama file logo kamu
-      ─────────────────────────────────────────────────
-      1. Siapkan file PNG logo (disarankan background transparan)
-      2. Beri nama: logo.png  (atau logo.jpg, logo.svg)
-      3. Upload ke repo GitHub sejajar index.html:
-            nama-repo/
-            ├── index.html
-            └── logo.png  ← di sini
-      4. Selesai! Logo langsung muncul.
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">
+      <img class="nav-logo-img" src="Logo.png" alt="YRGNstore Logo" onerror="this.classList.add('error')" />
+      <span class="nav-logo-name"><span class="brand">YRGN</span><span class="sub">store</span></span>
+    </a>
+    <a class="nav-wa" href="https://wa.me/6283166144481?text=Halo%2C%20saya%20ingin%20bertanya%20tentang%20produk" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Chat Admin
+    </a>
+  </nav>
 
-      Jika logo di subfolder → src="images/logo.png"
-    -->
-    <img
-      class="nav-logo-img"
-      src="Logo.png"
-      alt="YRGN22 Logo"
-      onerror="this.classList.add('error')"
-    />
-    <!-- Nama toko di sebelah kanan ikon — SELALU tampil -->
-    <span class="nav-logo-name">YRGN<span>store</span></span>
-  </a>
-  <a class="nav-wa" href="https://wa.me/6283166144481?text=Halo%2C%20saya%20ingin%20bertanya%20tentang%20produk" target="_blank">
-    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-    Chat Admin
-  </a>
-</nav>
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Produk Berkualitas<br>Harga Bersahabat</h1>
+    <p>Pembelian langsung melalui WhatsApp</p>
+  </section>
 
-<!-- ── HERO ── -->
-<section class="hero">
-  <h1>Produk Berkualitas<br>Harga Bersahabat</h1>
-  <p>Pembelian langsung melalui WhatsApp</p>
-</section>
-
-<!-- ================================================================
-     TOOLBAR: SEARCH BAR + TOMBOL FILTER KATEGORI
-     Tombol kategori dibuat otomatis — tidak perlu edit HTML ini
-     ================================================================ -->
-<div class="toolbar" id="produk">
-  <!-- Kotak pencarian -->
-  <div class="search-wrap">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-      <circle cx="11" cy="11" r="6"/><line x1="16.5" y1="16.5" x2="21" y2="21"/>
-    </svg>
-    <input type="text" id="searchInput" placeholder="Cari nama produk, kategori..." autocomplete="off" />
+  <!-- TOOLBAR -->
+  <div class="toolbar" id="produk">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="11" cy="11" r="6"/><line x1="16.5" y1="16.5" x2="21" y2="21"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Cari nama produk, kategori..." autocomplete="off" />
+    </div>
+    <div class="cat-wrap" id="catWrap"></div>
   </div>
-  <!-- Tombol kategori — diisi otomatis oleh JavaScript -->
-  <div class="cat-wrap" id="catWrap"></div>
-</div>
 
-<!-- ── PRODUCTS ── -->
-<section class="section">
-  <div class="section-header">
-    <h2 class="section-title">Produk Kami</h2>
-    <span class="section-count" id="countLabel"></span>
+  <!-- PRODUCTS -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Produk Kami</h2>
+      <span class="section-count" id="countLabel"></span>
+    </div>
+    <div class="grid" id="productGrid"></div>
+    <div class="pagination hidden" id="pagination"></div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <div class="banner">
+    <div class="banner-text">
+      <h2>Ada yang ingin ditanyakan?</h2>
+      <p>Tim admin siap bantu informasi stok & detail produk.</p>
+    </div>
+    <a class="banner-btn" href="https://wa.me/6283166144481?text=Halo%2C%20saya%20ingin%20bertanya" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Hubungi Admin
+    </a>
   </div>
-  <div class="grid" id="productGrid"></div>
 
-  <!-- Pagination — muncul otomatis jika produk yang tampil > PRODUCTS_PER_PAGE -->
-  <div class="pagination hidden" id="pagination"></div>
-</section>
+  <!-- FOOTER -->
+  <footer>
+    <p>© <span id="year"></span> <strong>YRGN</strong> · Store</p>
+  </footer>
 
-<!-- ── CTA BANNER ── -->
-<div class="banner">
-  <div class="banner-text">
-    <h2>Ada yang ingin ditanyakan?</h2>
-    <!-- <p>Tim admin kami siap membantu Anda<br>setiap hari</p> -->
-  </div>
-  <a class="banner-btn" href="https://wa.me/6283166144481?text=Halo%2C%20saya%20ingin%20bertanya" target="_blank">
-    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-    Hubungi Admin
-  </a>
-</div>
+  <!-- TOAST -->
+  <div id="toast">✓ Mengarahkan ke WhatsApp...</div>
 
-<!-- ── FOOTER ── -->
-<footer>
-  <p>© <span id="year"></span> <strong>YRGN</strong> · Store
-    <!-- <a href="https://wa.me/6283166144481" target="_blank">WhatsApp Admin</a> -->
-  </p>
-</footer>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-<!-- ── TOAST ── -->
-<div id="toast">✓ Mengarahkan ke WhatsApp...</div>
+    const ADMIN_WA  = '6283166144481';
+    const TOKO_NAMA = 'YRGNstore';
+    const PRODUCTS_PER_PAGE = 6;
 
-<!-- ── SCRIPT ── -->
-<script>
-  document.getElementById("year").textContent = new Date().getFullYear();
-  /* ================================================================
-     ⚙️  KONFIGURASI UTAMA — WAJIB DIUBAH SEBELUM DEPLOY
-     ================================================================ */
-  const ADMIN_WA  = '6283166144481'; // ← Nomor WA admin tanpa + dan spasi
-  const TOKO_NAMA = 'YRGNstore';          // ← Nama toko
+    // === Data produk dengan ukuran tunggal "Oversize" ===
+    const products = [
+      {
+        id: 1,
+        name: 'Mukadua 1',
+        desc: 'Ada harga ada kualitas',
+        price: 115000,
+        stock: 20,                // total stok
+        category: 'Baju',
+        badgeText: '🔥 BARU',
+        img: 'MUKADUA 1.png',
+        size: 'Oversize',         // <— cukup string saja
+      },
+      {
+        id: 2,
+        name: 'Mukadua 2',
+        desc: 'Ada harga ada kualitas',
+        price: 115000,
+        stock: 10,
+        category: 'Baju',
+        badgeText: '🔥 BARU',
+        img: 'MUKADUA 2.png',
+        size: 'Oversize',
+      },
+      {
+        id: 3,
+        name: 'Krem & Putih Geometrik Life Coach',
+        desc: 'Ada harga ada kualitas',
+        price: 95000,
+        stock: 6,
+        category: 'Baju',
+        badgeText: '🔥 BARU',
+        img: 'Krem & Putih Geometrik Life Coach Sampul Facebook.png',
+        size: 'Oversize',
+      },
+    ];
 
-  /* ================================================================
-     📄  JUMLAH PRODUK PER HALAMAN
-         Ganti angka di bawah untuk mengubah berapa produk yang
-         ditampilkan per halaman. Default: 8
-     ================================================================ */
-  const PRODUCTS_PER_PAGE = 6;
+    const fmt = n => 'Rp ' + n.toLocaleString('id-ID');
 
-  /* ================================================================
-     🛍️  DATA PRODUK
-     ================================================================
-     Setiap produk adalah satu objek {} di dalam array.
-     Salin-tempel blok {} untuk menambah produk baru.
+    let activeCategory = 'Semua';
+    let searchQuery    = '';
+    let currentPage    = 1;
 
-     Penjelasan setiap field:
-       id        → angka unik, jangan ada yang sama
-       name      → nama produk
-       desc      → deskripsi singkat
-       price     → harga (angka, tanpa titik/koma)
-       stock     → jumlah stok
-       category  → nama kategori BEBAS DIISI, mis: 'Tas', 'Sepatu', 'Aksesoris'
-                   ⬆ Tombol filter kategori dibuat OTOMATIS dari field ini!
-       badge     → 'hot' (merah) | 'new' (biru) | null (tanpa badge)
-       badgeText → teks label, mis: '🔥 Terlaris' atau '✨ Baru'
-       img       → URL foto produk (Imgur, imgBB, Google Drive publik, dll.)
-     ================================================================ */
-  const products = [
-    {
-      id: 1,
-      name: 'Mukadua 1',
-      desc: 'Ada harga ada kualitas',
-      price: 115000,
-      stock: 20,
-      category: 'Baju',
-      badge: 'new',
-      badgeText: '🔥 Baru',
-      img: 'MUKADUA 1.png',
-      sizes: 'Oversize',
-    },
-
-    {
-      id: 2,
-      name: 'Mukadua 2',
-      desc: 'Ada harga ada kualitas',
-      price: 115000,
-      stock: 20,
-      category: 'Baju',
-      badge: 'new',
-      badgeText: '🔥 Baru',
-      img: 'MUKADUA 2.png',
-      sizes: 'Oversize',
-    },
-
-    {
-      id: 3,
-      name: 'Krem & Putih Geometrik Life Coach',
-      desc: 'Ada harga ada kualitas',
-      price: 95000,
-      stock: 20,
-      category: 'Baju',
-      badge: 'new',
-      badgeText: '🔥 Baru',
-      img: 'Krem & Putih Geometrik Life Coach.png',
-      sizes: 'Oversize',
-    },
-   
-  ];
-
-  /* ================================================================
-     💰  FORMAT HARGA — Mengubah angka menjadi "Rp 125.000"
-     ================================================================ */
-  const fmt = n => 'Rp ' + n.toLocaleString('id-ID');
-
-  /* ================================================================
-     🔍  STATE FILTER
-         Menyimpan kategori aktif dan kata kunci pencarian saat ini
-     ================================================================ */
-  let activeCategory = 'Semua'; // kategori yang sedang aktif
-  let searchQuery    = '';      // kata kunci dari search bar
-  let currentPage    = 1;       // halaman yang sedang aktif (mulai dari 1)
-
-  /* ================================================================
-     🏷️  RENDER TOMBOL KATEGORI
-         Tombol dibuat otomatis dari field category di setiap produk.
-         Cukup tambah category baru di data produk, tombol muncul sendiri!
-     ================================================================ */
-  function renderCategories() {
-    // Kumpulkan semua kategori unik, tambahkan "Semua" di posisi pertama
-    const cats = ['Semua', ...new Set(products.map(p => p.category))];
-    document.getElementById('catWrap').innerHTML = cats.map(cat => `
-      <button
-        class="cat-pill ${cat === activeCategory ? 'active' : ''}"
-        onclick="setCategory('${cat}')"
-      >${cat}</button>
-    `).join('');
-  }
-
-  /* ================================================================
-     🖼️  RENDER KARTU PRODUK
-         Menyaring produk berdasarkan kategori + kata kunci,
-         lalu memotong hasilnya sesuai halaman aktif (currentPage).
-     ================================================================ */
-  function renderProducts() {
-    const q    = searchQuery.toLowerCase().trim();
-    const grid = document.getElementById('productGrid');
-
-    // Filter produk berdasarkan kategori DAN kata kunci pencarian
-    const filtered = products.filter(p => {
-      const matchCat    = activeCategory === 'Semua' || p.category === activeCategory;
-      const matchSearch = !q ||
-        p.name.toLowerCase().includes(q) ||
-        p.desc.toLowerCase().includes(q) ||
-        p.category.toLowerCase().includes(q);
-      return matchCat && matchSearch;
-    });
-
-    // Hitung total halaman
-    const totalPages = Math.ceil(filtered.length / PRODUCTS_PER_PAGE);
-
-    // Pastikan currentPage tidak melebihi total halaman
-    if (currentPage > totalPages) currentPage = Math.max(1, totalPages);
-
-    // Potong array sesuai halaman aktif
-    const start   = (currentPage - 1) * PRODUCTS_PER_PAGE;
-    const paged   = filtered.slice(start, start + PRODUCTS_PER_PAGE);
-
-    // Update label jumlah produk
-    const showing = paged.length;
-    const total   = filtered.length;
-    document.getElementById('countLabel').textContent =
-      total === 0     ? '' :
-      total === products.length
-        ? `${total} produk`
-        : `${total} dari ${products.length} produk`;
-
-    // Tampilkan pesan kosong jika tidak ada hasil
-    if (filtered.length === 0) {
-      grid.innerHTML = `
-        <div class="empty">
-          <div class="empty-icon">🔍</div>
-          <h3>Produk tidak ditemukan</h3>
-          <p>Coba kata kunci lain atau pilih kategori yang berbeda.</p>
-        </div>`;
-      renderPagination(0, 0);
-      return;
+    function renderCategories() {
+      const cats = ['Semua', ...new Set(products.map(p => p.category))];
+      document.getElementById('catWrap').innerHTML = cats.map(cat => `
+        <button class="cat-pill ${cat === activeCategory ? 'active' : ''}" onclick="setCategory('${cat}')">${cat}</button>
+      `).join('');
     }
 
-    // SVG ikon WhatsApp (dipakai ulang di setiap tombol beli)
-    const waSvg = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+    function filterProducts() {
+      const q = searchQuery.toLowerCase().trim();
+      return products.filter(p => {
+        const matchCat    = activeCategory === 'Semua' || p.category === activeCategory;
+        const matchSearch = !q || p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q) || p.category.toLowerCase().includes(q);
+        return matchCat && matchSearch;
+      });
+    }
 
-    // Render kartu produk untuk halaman aktif saja
-    grid.innerHTML = paged.map(p => `
-      <div class="card" id="card-${p.id}">
-        <div class="card-img-wrap">
-          <img src="${p.img}" alt="${p.name}" loading="lazy" />
-          ${p.badge ? `<span class="badge ${p.badge}">${p.badgeText}</span>` : ''}
-          <span class="cat-badge">${p.category}</span>
-        </div>
-        <div class="card-body">
-          <div class="card-name">${p.name}</div>
-          <div class="card-desc">${p.desc}</div>
-          <div class="card-meta">
-            <span class="card-price">${fmt(p.price)}</span>
-            <span class="card-stock">Stok: ${p.stock}</span>
-          </div>
-          <button class="btn-buy" onclick="beli(${p.id})">
-            ${waSvg} Beli via WhatsApp
-          </button>
-        </div>
-      </div>
-    `).join('');
+    function renderProducts() {
+      const grid = document.getElementById('productGrid');
+      const filtered = filterProducts();
 
-    // Render kontrol pagination
-    renderPagination(currentPage, totalPages);
-  }
+      const totalPages = Math.ceil(filtered.length / PRODUCTS_PER_PAGE) || 1;
+      if (currentPage > totalPages) currentPage = Math.max(1, totalPages);
+      const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
+      const paged = filtered.slice(start, start + PRODUCTS_PER_PAGE);
 
-  /* ================================================================
-     📄  RENDER PAGINATION
-         Membuat tombol Prev, nomor halaman, dan Next.
-         Muncul otomatis hanya jika ada lebih dari 1 halaman.
-         Nomor halaman yang panjang ditampilkan dengan "..." di tengah.
-     ================================================================ */
-  function renderPagination(page, total) {
-    const el = document.getElementById('pagination');
+      const total = filtered.length;
+      document.getElementById('countLabel').textContent =
+        total === 0 ? '' : (total === products.length ? `${total} produk` : `${total} dari ${products.length} produk`);
 
-    // Sembunyikan pagination jika hanya 1 halaman atau kosong
-    if (total <= 1) { el.classList.add('hidden'); el.innerHTML = ''; return; }
-    el.classList.remove('hidden');
-
-    // Tentukan nomor halaman yang ditampilkan (dengan titik "...")
-    // Selalu tampilkan: halaman 1, halaman terakhir, halaman aktif ±1
-    const pages = [];
-    for (let i = 1; i <= total; i++) {
-      if (i === 1 || i === total || (i >= page - 1 && i <= page + 1)) {
-        pages.push(i);
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted)">
+            <div style="font-size:3rem;margin-bottom:12px;">🔍</div>
+            <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:6px;color:var(--ink);">Produk tidak ditemukan</h3>
+            <p style="font-size:.9rem;line-height:1.6">Coba kata kunci lain atau pilih kategori yang berbeda.</p>
+          </div>`;
+        renderPagination(0,0);
+        return;
       }
+
+      const waSvg = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+
+      grid.innerHTML = paged.map(p=>{
+        // Status stok sederhana
+        const stockClass = p.stock<=0 ? 'color:#ef4444' : (p.stock<=3 ? 'color:#ca8a04' : 'color:#059669');
+        const stockText  = p.stock<=0 ? 'Stok habis' : (p.stock<=3 ? 'Stok menipis' : 'Stok tersedia');
+
+        return `
+          <div class="card" id="card-${p.id}">
+            <div class="card-img-wrap">
+              <img src="${p.img}" alt="${p.name}" loading="lazy" />
+              <span class="badge">${p.badgeText || 'BARU'}</span>
+              <span class="cat-badge">${p.category}</span>
+            </div>
+            <div class="card-body">
+              <div class="card-name">${p.name}</div>
+              <div class="card-desc">${p.desc}</div>
+
+              <!-- Ukuran tunggal -->
+              <div class="single-size" title="Ukuran kaos">
+                <span class="label">Ukuran</span>
+                <span class="value">${p.size || 'Oversize'}</span>
+              </div>
+
+              <div class="card-meta">
+                <span class="card-price">${fmt(p.price)}</span>
+                <span class="card-stock" style="${stockClass}">${stockText}</span>
+              </div>
+
+              <button class="btn-buy" onclick="beli(${p.id})">
+                ${waSvg} Beli via WhatsApp
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      renderPagination(currentPage, Math.ceil(filtered.length / PRODUCTS_PER_PAGE) || 1);
     }
-    // Sisipkan '...' di antara lompatan angka
-    const withDots = [];
-    pages.forEach((p, idx) => {
-      if (idx > 0 && p - pages[idx - 1] > 1) withDots.push('...');
-      withDots.push(p);
+
+    function renderPagination(page,total){
+      const el = document.getElementById('pagination');
+      if(total<=1){el.classList.add('hidden');el.innerHTML='';return;}
+      el.classList.remove('hidden');
+
+      const pages=[];
+      for(let i=1;i<=total;i++){ if(i===1||i===total||(i>=page-1 && i<=page+1)) pages.push(i); }
+      const withDots=[];
+      pages.forEach((p,idx)=>{ if(idx>0 && p-pages[idx-1]>1) withDots.push('...'); withDots.push(p); });
+
+      const iconPrev = `<svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+      const iconNext = `<svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+      el.innerHTML =
+        `<button class="pg-btn" onclick="goPage(${page-1})" ${page===1?'disabled':''}>${iconPrev}<span>Sebelumnya</span></button>`+
+        withDots.map(p=>p==='...' ? `<span class="pg-dots">…</span>` : `<button class="pg-num ${p===page?'active':''}" onclick="goPage(${p})">${p}</button>`).join('')+
+        `<button class="pg-btn" onclick="goPage(${page+1})" ${page===total?'disabled':''}><span>Berikutnya</span>${iconNext}</button>`;
+    }
+
+    function goPage(page){
+      currentPage = page;
+      renderProducts();
+      document.getElementById('produk').scrollIntoView({behavior:'smooth',block:'start'});
+    }
+
+    function setCategory(cat){
+      activeCategory = cat;
+      currentPage = 1;
+      renderCategories();
+      renderProducts();
+    }
+
+    document.getElementById('searchInput').addEventListener('input',function(){
+      searchQuery = this.value;
+      currentPage = 1;
+      renderProducts();
     });
 
-    // SVG panah kiri & kanan
-    const iconPrev = `<svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>`;
-    const iconNext = `<svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>`;
+    // Beli via WA (otomatis pakai ukuran Oversize)
+    window.beli = function(id){
+      const p = products.find(x=>x.id===id);
+      if(!p) return;
 
-    el.innerHTML =
-      // Tombol Prev
-      `<button class="pg-btn" onclick="goPage(${page - 1})" ${page === 1 ? 'disabled' : ''}>
-        ${iconPrev}<span>Sebelumnya</span>
-       </button>` +
-      // Nomor halaman
-      withDots.map(p =>
-        p === '...'
-          ? `<span class="pg-dots">…</span>`
-          : `<button class="pg-num ${p === page ? 'active' : ''}" onclick="goPage(${p})">${p}</button>`
-      ).join('') +
-      // Tombol Next
-      `<button class="pg-btn" onclick="goPage(${page + 1})" ${page === total ? 'disabled' : ''}>
-        <span>Berikutnya</span>${iconNext}
-       </button>`;
-  }
+      const msg = encodeURIComponent(
+        `Halo Admin ${TOKO_NAMA} 👋\n\n`+
+        `Saya ingin memesan:\n`+
+        `🛍️ *${p.name}*\n`+
+        `📏 Ukuran: ${p.size || 'Oversize'}\n`+
+        `🏷️ Kategori: ${p.category}\n`+
+        `💰 Harga: ${fmt(p.price)}\n\n`+
+        `Mohon informasi ketersediaan dan cara pembayarannya. Terima kasih!`
+      );
 
-  /* ================================================================
-     ➡️  PINDAH HALAMAN — Dipanggil saat tombol pagination diklik
-         Setelah ganti halaman, scroll ke atas section produk
-     ================================================================ */
-  function goPage(page) {
-    currentPage = page;
-    renderProducts();
-    // Scroll halus ke atas bagian produk
-    document.getElementById('produk').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+      showToast('Mengarahkan ke WhatsApp...');
+      setTimeout(()=>{ window.open(`https://wa.me/${ADMIN_WA}?text=${msg}`,'_blank','noopener'); },500);
+    }
 
-  /* ================================================================
-     🏷️  SET KATEGORI — Dipanggil saat tombol kategori diklik
-     ================================================================ */
-  /* ================================================================
-     🏷️  SET KATEGORI — Dipanggil saat tombol kategori diklik
-         Reset ke halaman 1 saat kategori berubah
-     ================================================================ */
-  function setCategory(cat) {
-    activeCategory = cat;
-    currentPage    = 1;         // ← Kembali ke halaman 1
+    let toastTimer;
+    function showToast(msg){
+      const t=document.getElementById('toast');
+      t.textContent='✓ '+msg;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer=setTimeout(()=>t.classList.remove('show'),2400);
+    }
+
+    // Init
     renderCategories();
     renderProducts();
-  }
-
-  /* ================================================================
-     🔍  LIVE SEARCH — Dipanggil setiap ketikan di kotak pencarian
-         Pencarian berlaku bersamaan dengan filter kategori aktif
-     ================================================================ */
-  /* ================================================================
-     🔍  LIVE SEARCH — Reset ke halaman 1 setiap kali kata kunci berubah
-     ================================================================ */
-  document.getElementById('searchInput').addEventListener('input', function () {
-    searchQuery = this.value;
-    currentPage = 1;   // ← Kembali ke halaman 1 saat mengetik
-    renderProducts();
-  });
-
-  /* ================================================================
-     📲  FUNGSI BELI — Buka WhatsApp dengan pesan produk otomatis
-         Pesan berisi: nama produk, kategori, dan harga
-     ================================================================ */
-  function beli(id) {
-    const p = products.find(x => x.id === id);
-    if (!p) return;
-
-    const msg = encodeURIComponent(
-      `Halo Admin ${TOKO_NAMA} 👋\n\n` +
-      `Saya ingin memesan:\n` +
-      `🛍️ *${p.name}*\n` +
-      `🏷️ Kategori: ${p.category}\n` +
-      `💰 Harga: ${fmt(p.price)}\n\n` +
-      `Mohon informasi ketersediaan dan cara pembayarannya. Terima kasih!`
-    );
-
-    showToast('Mengarahkan ke WhatsApp...');
-    setTimeout(() => {
-      window.open(`https://wa.me/${ADMIN_WA}?text=${msg}`, '_blank');
-    }, 600);
-  }
-
-  /* ================================================================
-     🔔  TOAST NOTIFIKASI — Muncul sementara di bawah layar
-     ================================================================ */
-  let toastTimer;
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = '✓ ' + msg;
-    t.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
-  }
-
-  /* ================================================================
-     🚀  INISIALISASI — Jalankan saat halaman pertama kali dibuka
-     ================================================================ */
-  renderCategories(); // Buat tombol kategori
-  renderProducts();   // Tampilkan semua produk
-</script>
+  </script>
 </body>
 </html>
