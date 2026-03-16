@@ -16,7 +16,7 @@
 
     body {
       font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
+      background: #ccc;
       color: var(--ink);
       min-height: 100vh;
     }
@@ -160,6 +160,7 @@
       margin-bottom: 28px;
       border-bottom: 1px solid var(--border);
       padding-bottom: 14px;
+
     }
     .section-title {
       font-family: 'Playfair Display', serif;
