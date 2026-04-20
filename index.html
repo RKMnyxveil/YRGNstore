@@ -1,273 +1,910 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>YRGN22 — Belanja Mudah & Cepat</title>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css"/>
+  <title>YRGNstore — Belanja Mudah & Cepat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    /* ── TOKENS ─────────────────────────────────────── */
+    :root{
+      --bg:#000000;
+      --bg2:#0a0a0a;
+      --surface:#111111;
+      --surface2:#1a1a1a;
+      --ink:#ffffff;
+      --ink2:#b0b0b0;
+      --ink3:#666666;
+      --cream:#ffffff;
+      --cream-dim:#e0e0e0;
+      --wa:#ffffff;
+      --wa-dark:#cccccc;
+      --price:#ff3333;
+      --stock-ok:#00cc66;
+      --stock-out:#ff4444;
+      --border:rgba(255,255,255,.12);
+      --border2:rgba(255,255,255,.2);
+      --r:14px;
+      --r-lg:20px;
+      --sh:0 24px 60px rgba(0,0,0,.8);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden}
 
+    /* ── SCROLLBAR ───────────────────────────────────── */
+    ::-webkit-scrollbar{width:6px}
+    ::-webkit-scrollbar-track{background:var(--bg2)}
+    ::-webkit-scrollbar-thumb{background:var(--ink3);border-radius:3px}
+
+    /* ── ANNOUNCE BAR ────────────────────────────────── */
+    .announce{
+      background:var(--cream);color:#000000;
+      text-align:center;padding:9px 16px;font-size:.8rem;font-weight:600;letter-spacing:.05em;
+      position:relative;overflow:hidden;
+    }
+    .announce-inner{display:flex;align-items:center;justify-content:center;gap:8px}
+    .announce a{color:#000000;text-decoration:underline;font-weight:700}
+
+    /* ── NAV ─────────────────────────────────────────── */
+    nav{
+      position:sticky;top:0;z-index:100;
+      background:rgba(0,0,0,.95);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+      border-bottom:1px solid var(--border);height:64px;
+      padding:0 clamp(16px,4vw,48px);
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+    }
+    .nav-logo{
+      display:flex;
+      flex-direction:row;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      text-decoration:none;
+    }
+    .nav-logo img{
+      height:36px;
+      width:36px;
+      object-fit:contain;
+      border-radius:6px;
+    }
+    .logo-text{
+      font-family:'Cormorant Garamond',serif;
+      font-weight:700;
+      font-size:1.3rem;
+      color:var(--ink);
+      letter-spacing:.02em;
+      line-height:1;
+    }
+    .logo-text span{color:var(--cream)}
+    .nav-right{display:flex;align-items:center;gap:12px}
+    .btn-icon{
+      position:relative;background:var(--surface);border:1px solid var(--border);color:var(--ink);
+      width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+      cursor:pointer;transition:all .2s;font-size:1rem;
+    }
+    .btn-icon:hover{background:var(--surface2);border-color:var(--border2);color:var(--cream)}
+    .cart-badge{
+      position:absolute;top:-5px;right:-5px;background:var(--cream);color:#000000;
+      font-size:.65rem;font-weight:800;width:18px;height:18px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s,transform .2s;transform:scale(0);
+    }
+    .cart-badge.show{opacity:1;transform:scale(1)}
+    .btn-wa-nav{
+      display:flex;align-items:center;gap:7px;background:var(--cream);color:#000000;
+      text-decoration:none;font-weight:600;font-size:.85rem;padding:9px 16px;border-radius:10px;
+      transition:all .2s;
+    }
+    .btn-wa-nav:hover{background:var(--wa-dark);transform:translateY(-1px)}
+    .btn-wa-nav svg{width:15px;height:15px;fill:#000000;flex-shrink:0}
+    @media(max-width:440px){.btn-wa-nav span{display:none}.btn-wa-nav{padding:9px 12px;border-radius:50%}}
+
+    /* ── HERO ────────────────────────────────────────── */
+    .hero{
+      position:relative;padding:80px clamp(16px,5vw,64px) 64px;overflow:hidden;
+      background:radial-gradient(ellipse 900px 500px at 50% -100px,rgba(255,255,255,.05),transparent 70%);
+    }
+    .hero-noise{
+      position:absolute;inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events:none;opacity:.4;
+    }
+    .hero-content{position:relative;z-index:1;max-width:680px;margin:0 auto;text-align:center}
+    .hero-eyebrow{
+      display:inline-flex;align-items:center;gap:6px;
+      background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+      color:var(--cream);font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+      padding:6px 14px;border-radius:999px;margin-bottom:20px;
+    }
+    .hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--cream);animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+    .hero h1{
+      font-family:'Cormorant Garamond',serif;font-size:clamp(2.6rem,7vw,4.5rem);
+      line-height:1.05;font-weight:700;margin-bottom:16px;
+      background:linear-gradient(135deg,var(--ink) 0%,var(--cream-dim) 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .hero p{color:var(--ink2);font-size:1rem;line-height:1.7;margin-bottom:32px;max-width:420px;margin-left:auto;margin-right:auto}
+    .hero-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .btn-primary{
+      display:inline-flex;align-items:center;gap:8px;background:var(--cream);color:#000000;
+      text-decoration:none;font-weight:700;font-size:.9rem;padding:13px 24px;border-radius:12px;
+      transition:all .2s;border:none;cursor:pointer;
+    }
+    .btn-primary:hover{background:#e0e0e0;transform:translateY(-2px);box-shadow:0 12px 32px rgba(255,255,255,.3)}
+    .btn-outline{
+      display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--ink);
+      text-decoration:none;font-weight:600;font-size:.9rem;padding:13px 24px;border-radius:12px;
+      border:1.5px solid var(--border2);transition:all .2s;cursor:pointer;
+    }
+    .btn-outline:hover{background:var(--surface);border-color:var(--border2);transform:translateY(-2px)}
+
+    /* ── TRUST BADGES ────────────────────────────────── */
+    .trust{
+      display:flex;align-items:center;justify-content:center;gap:clamp(16px,4vw,40px);
+      padding:32px clamp(16px,5vw,64px);border-bottom:1px solid var(--border);flex-wrap:wrap;
+    }
+    .trust-item{display:flex;align-items:center;gap:10px;color:var(--ink2);font-size:.85rem;font-weight:500}
+    .trust-item .ico{font-size:1.3rem}
+
+    /* ── TOOLBAR ─────────────────────────────────────── */
+    .toolbar{padding:28px clamp(16px,5vw,64px) 0}
+    .toolbar-inner{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .search-wrap{position:relative;flex:1;min-width:220px;max-width:480px}
+    .search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink3);pointer-events:none}
+    #searchInput{
+      width:100%;padding:11px 14px 11px 42px;
+      background:var(--surface);border:1.5px solid var(--border);border-radius:12px;
+      color:var(--ink);font-size:.9rem;font-family:'Outfit',sans-serif;outline:none;
+      transition:border-color .2s,box-shadow .2s;
+    }
+    #searchInput::placeholder{color:var(--ink3)}
+    #searchInput:focus{border-color:var(--cream);box-shadow:0 0 0 3px rgba(255,255,255,.1)}
+    .sort-wrap select{
+      padding:11px 36px 11px 14px;background:var(--surface);border:1.5px solid var(--border);
+      border-radius:12px;color:var(--ink);font-size:.85rem;font-family:'Outfit',sans-serif;
+      outline:none;cursor:pointer;appearance:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23b0b0b0' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;background-position:right 12px center;
+    }
+    .cats{display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;padding:14px 0 4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+    .cats::-webkit-scrollbar{display:none}
+    .cat-pill{
+      padding:7px 16px;border-radius:999px;border:1.5px solid var(--border);background:transparent;
+      color:var(--ink2);font-size:.8rem;font-weight:600;cursor:pointer;white-space:nowrap;
+      transition:all .18s;font-family:'Outfit',sans-serif;
+    }
+    .cat-pill:hover{border-color:var(--border2);color:var(--ink)}
+    .cat-pill.active{background:var(--cream);color:#000000;border-color:var(--cream)}
+
+    /* ── SECTION ─────────────────────────────────────── */
+    .section{padding:24px clamp(16px,5vw,64px) 80px}
+    .section-header{
+      display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap;
+      margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border);
+    }
+    .section-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:600}
+    .section-count{color:var(--ink3);font-size:.85rem}
+
+    /* ── GRID ────────────────────────────────────────── */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
+    @media(max-width:480px){.grid{grid-template-columns:repeat(2,1fr);gap:12px}}
+    @media(min-width:960px){.grid{grid-template-columns:repeat(3,1fr)}}
+    @media(min-width:1280px){.grid{grid-template-columns:repeat(4,1fr)}}
+
+    /* ── CARD ────────────────────────────────────────── */
+    .card{
+      background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+      display:flex;flex-direction:column;overflow:hidden;
+      transition:transform .3s cubic-bezier(.34,1.3,.64,1),box-shadow .3s,border-color .3s;cursor:default;
+    }
+    .card:hover{transform:translateY(-6px);box-shadow:var(--sh);border-color:var(--border2)}
+
+    .card-img-wrap{position:relative;aspect-ratio:4/3;overflow:hidden;background:var(--bg2)}
+    .card-img-wrap img{
+      width:100%;height:100%;object-fit:contain;display:block;background:#ffffff;
+      transition:transform .5s cubic-bezier(.25,.46,.45,.94);
+    }
+    .card:hover .card-img-wrap img{transform:scale(1.05)}
+    .card-overlay{
+      position:absolute;inset:0;background:rgba(0,0,0,.85);
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      opacity:0;transition:opacity .25s;
+    }
+    .card:hover .card-overlay{opacity:1}
+    .overlay-btn{
+      background:var(--cream);color:#000000;border:none;
+      padding:9px 18px;border-radius:10px;font-weight:700;font-size:.82rem;cursor:pointer;
+      transition:all .15s;font-family:'Outfit',sans-serif;
+      display:flex;align-items:center;gap:6px;
+    }
+    .overlay-btn:hover{background:#e0e0e0;transform:scale(1.04)}
+    .overlay-icon{
+      background:var(--surface2);color:var(--ink);border:1px solid var(--border2);
+      width:38px;height:38px;border-radius:10px;font-size:1rem;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;transition:all .15s;
+    }
+    .overlay-icon:hover{background:var(--surface);transform:scale(1.08)}
+    .overlay-icon.wishlisted{color:#ff3333}
+
+    .badge{
+      position:absolute;top:10px;left:10px;color:#000000;font-size:.68rem;font-weight:800;
+      letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--cream);z-index:1;
+    }
+
+    .card-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;flex:1}
+    .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+    .card-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;line-height:1.3;color:var(--ink)}
+    .card-cat{font-size:.72rem;color:var(--ink3);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+    .card-desc{font-size:.82rem;color:var(--ink3);line-height:1.6}
+
+    .size-chip{
+      display:inline-flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);
+      border-radius:8px;padding:6px 12px;font-size:.8rem;font-weight:600;color:var(--ink);width:fit-content;
+    }
+    .size-chip .lbl{color:var(--ink3);font-weight:500}
+
+    .card-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+    .price-wrap{}
+    .card-price{font-weight:700;font-size:1.1rem;color:var(--cream)}
+    .card-stock{font-size:.76rem;font-weight:500;margin-top:2px}
+    .card-stock.available{color:var(--stock-ok)}
+    .card-stock.out{color:var(--stock-out)}
+
+    .btn-cart{
+      background:var(--cream);color:#000000;border:none;border-radius:10px;
+      padding:9px 14px;font-size:.82rem;font-weight:700;cursor:pointer;
+      transition:all .2s;font-family:'Outfit',sans-serif;
+      display:flex;align-items:center;gap:6px;
+    }
+    .btn-cart:disabled{opacity:0.5;cursor:not-allowed;background:var(--ink3);color:#000;transform:none;}
+    .btn-cart:not(:disabled):hover{background:var(--wa-dark);transform:translateY(-1px)}
+    .btn-cart svg{width:14px;height:14px;fill:#000000}
+
+    /* ── EMPTY STATE ─────────────────────────────────── */
+    .empty{
+      grid-column:1/-1;text-align:center;padding:80px 20px;
+    }
+    .empty-icon{font-size:3rem;margin-bottom:16px;opacity:.4}
+    .empty h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;margin-bottom:8px}
+    .empty p{color:var(--ink3);font-size:.9rem}
+
+    /* ── CART DRAWER ─────────────────────────────────── */
+    .cart-overlay{
+      position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(4px);
+      z-index:200;opacity:0;pointer-events:none;transition:opacity .3s;
+    }
+    .cart-overlay.open{opacity:1;pointer-events:auto}
+    .cart-drawer{
+      position:fixed;top:0;right:0;height:100%;width:min(420px,100vw);
+      background:var(--bg2);border-left:1px solid var(--border);
+      display:flex;flex-direction:column;z-index:201;
+      transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);
+    }
+    .cart-overlay.open .cart-drawer{transform:translateX(0)}
+    .cart-head{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:20px 24px;border-bottom:1px solid var(--border);flex-shrink:0;
+    }
+    .cart-head h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700}
+    .cart-close{
+      background:var(--surface);border:1px solid var(--border);color:var(--ink);
+      width:36px;height:36px;border-radius:8px;cursor:pointer;font-size:1.1rem;
+      display:flex;align-items:center;justify-content:center;transition:all .2s;
+    }
+    .cart-close:hover{background:var(--surface2);color:var(--cream)}
+    .cart-body{flex:1;overflow-y:auto;padding:16px 24px}
+    .cart-empty{text-align:center;padding:60px 20px;color:var(--ink3)}
+    .cart-empty .ico{font-size:2.5rem;margin-bottom:12px}
+    .cart-item{
+      display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--border);align-items:flex-start;
+    }
+    .cart-item-img{
+      width:68px;height:68px;border-radius:10px;object-fit:contain;background:#ffffff;
+      flex-shrink:0;border:1px solid var(--border);
+    }
+    .ci-info{flex:1;min-width:0}
+    .ci-name{font-weight:700;font-size:.9rem;margin-bottom:2px;font-family:'Cormorant Garamond',serif}
+    .ci-sub{font-size:.78rem;color:var(--ink3);margin-bottom:8px}
+    .ci-controls{display:flex;align-items:center;justify-content:space-between}
+    .qty-wrap{display:flex;align-items:center;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+    .qty-btn{
+      background:none;border:none;color:var(--ink);width:30px;height:30px;cursor:pointer;
+      font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .15s;
+    }
+    .qty-btn:hover{background:var(--surface2);color:var(--cream)}
+    .qty-val{font-size:.85rem;font-weight:700;min-width:24px;text-align:center}
+    .ci-price{font-weight:700;font-size:.9rem;color:var(--cream)}
+    .ci-remove{background:none;border:none;color:var(--ink3);cursor:pointer;font-size:.78rem;margin-top:4px;transition:color .2s;text-decoration:underline;font-family:'Outfit',sans-serif}
+    .ci-remove:hover{color:var(--price)}
+
+    .cart-foot{padding:20px 24px;border-top:1px solid var(--border);flex-shrink:0}
+    .cart-summary{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+    .cart-row{display:flex;justify-content:space-between;font-size:.88rem;color:var(--ink2)}
+    .cart-total-row{display:flex;justify-content:space-between;font-size:1rem;font-weight:700;color:var(--ink);border-top:1px solid var(--border);padding-top:10px}
+    .btn-checkout{
+      width:100%;display:flex;align-items:center;justify-content:center;gap:8px;
+      background:var(--cream);color:#000000;border:none;border-radius:12px;
+      padding:14px;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .2s;
+      font-family:'Outfit',sans-serif;
+    }
+    .btn-checkout:hover{background:var(--wa-dark)}
+    .btn-checkout svg{width:18px;height:18px;fill:#000000}
+    .btn-continue{
+      width:100%;background:transparent;border:1.5px solid var(--border);color:var(--ink2);
+      border-radius:12px;padding:11px;font-size:.85rem;font-weight:600;cursor:pointer;
+      margin-top:8px;transition:all .2s;font-family:'Outfit',sans-serif;
+    }
+    .btn-continue:hover{border-color:var(--border2);color:var(--ink)}
+
+    /* ── PRODUCT MODAL ───────────────────────────────── */
+    .modal-overlay{
+      position:fixed;inset:0;background:rgba(0,0,0,.9);backdrop-filter:blur(8px);
+      z-index:300;opacity:0;pointer-events:none;transition:opacity .3s;
+      display:flex;align-items:center;justify-content:center;padding:20px;
+    }
+    .modal-overlay.open{opacity:1;pointer-events:auto}
+    .modal{
+      background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-lg);
+      width:100%;max-width:800px;max-height:90vh;overflow-y:auto;
+      transform:scale(.95) translateY(20px);transition:transform .3s cubic-bezier(.34,1.3,.64,1);
+    }
+    .modal-overlay.open .modal{transform:scale(1) translateY(0)}
+    .modal-inner{display:grid;grid-template-columns:1fr 1fr;min-height:400px}
+    @media(max-width:600px){.modal-inner{grid-template-columns:1fr}}
+    .modal-img-side{background:var(--bg);border-radius:var(--r-lg) 0 0 var(--r-lg);overflow:hidden;aspect-ratio:4/3}
+    @media(max-width:600px){.modal-img-side{border-radius:var(--r-lg) var(--r-lg) 0 0}}
+    .modal-img-side img{width:100%;height:100%;object-fit:contain;background:#ffffff}
+    .modal-info{padding:32px;display:flex;flex-direction:column;gap:16px}
+    .modal-cat{font-size:.75rem;color:var(--cream-dim);font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+    .modal-name{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;line-height:1.2}
+    .modal-price{font-size:1.5rem;font-weight:700;color:var(--cream)}
+    .modal-desc{font-size:.9rem;color:var(--ink2);line-height:1.7}
+    
+    .modal-size-label{font-size:.82rem;color:var(--ink2);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+    .modal-size-chip{
+      display:inline-flex;align-items:center;background:var(--cream);color:#000000;
+      padding:6px 16px;border-radius:999px;font-size:.85rem;font-weight:700;
+    }
+    .modal-stock{font-size:.82rem;font-weight:500;margin-top:4px}
+    .modal-stock.available{color:var(--stock-ok)}
+    .modal-stock.out{color:var(--stock-out)}
+    .modal-actions{display:flex;gap:10px;flex-direction:column;margin-top:auto}
+    .modal-close{
+      position:absolute;top:16px;right:16px;background:var(--surface);border:1px solid var(--border);
+      color:var(--ink);width:36px;height:36px;border-radius:8px;cursor:pointer;font-size:1.1rem;
+      display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:1;
+    }
+    .modal-close:hover{background:var(--surface2);color:var(--cream)}
+    .modal-wrap{position:relative}
+
+    /* ── WISHLIST TOAST ──────────────────────────────── */
+    #toast{
+      position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);
+      background:var(--surface2);color:var(--ink);border:1px solid var(--border2);
+      padding:12px 24px;border-radius:999px;font-size:.88rem;font-weight:600;
+      box-shadow:0 12px 40px rgba(0,0,0,.8);
+      transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s;
+      opacity:0;pointer-events:none;white-space:nowrap;z-index:999;
+    }
+    #toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+    /* ── BANNER ──────────────────────────────────────── */
+    .banner{
+      margin:0 clamp(16px,5vw,64px) 60px;
+      background:var(--cream);
+      color:#000000;border-radius:var(--r-lg);padding:40px clamp(24px,5%,64px);
+      display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+      position:relative;overflow:hidden;
+    }
+    .banner::after{
+      content:'';position:absolute;right:-40px;top:-40px;
+      width:200px;height:200px;border-radius:50%;
+      background:rgba(0,0,0,.08);
+    }
+    .banner-text h2{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;margin-bottom:6px}
+    .banner-text p{font-size:.9rem;opacity:.75;line-height:1.6}
+    .banner-btn{
+      display:flex;align-items:center;gap:10px;background:#000000;color:var(--cream);
+      padding:13px 24px;border-radius:12px;text-decoration:none;font-weight:700;font-size:.9rem;
+      transition:all .2s;position:relative;z-index:1;
+    }
+    .banner-btn:hover{background:#222222;transform:translateY(-2px)}
+    .banner-btn svg{width:18px;height:18px;fill:var(--cream)}
+
+    /* ── FOOTER ──────────────────────────────────────── */
+    footer{
+      border-top:1px solid var(--border);
+      padding:40px clamp(16px,5vw,64px);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      text-align:center;
+    }
+    .footer-brand{
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.2rem;
+      font-weight:700;
+      color:var(--ink2);
+    }
+    .footer-brand span{color:var(--cream)}
+    .footer-right{color:var(--ink3);font-size:.82rem}
+
+    /* ── PAGINATION ──────────────────────────────────── */
+    .pagination{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:40px;flex-wrap:wrap}
+    .pg-btn{
+      display:flex;align-items:center;gap:6px;padding:9px 16px;background:var(--surface);
+      border:1px solid var(--border);border-radius:10px;color:var(--ink);font-size:.85rem;
+      font-weight:600;cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif;
+    }
+    .pg-btn:hover:not(:disabled){background:var(--surface2);border-color:var(--border2);color:var(--cream)}
+    .pg-btn:disabled{opacity:.35;cursor:not-allowed}
+    .pg-num{
+      width:36px;height:36px;background:var(--surface);border:1px solid var(--border);
+      border-radius:8px;color:var(--ink);font-size:.85rem;font-weight:600;cursor:pointer;
+      transition:all .2s;display:flex;align-items:center;justify-content:center;
+      font-family:'Outfit',sans-serif;
+    }
+    .pg-num:hover{background:var(--surface2);border-color:var(--border2);color:var(--cream)}
+    .pg-num.active{background:var(--cream);border-color:var(--cream);color:#000000}
+    .pg-dots{color:var(--ink3);padding:0 4px}
+    .hidden{display:none!important}
+  </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a class="nav-logo" href="#">
-      <img class="nav-logo-img" src="Logo.png" alt="YRGNstore Logo" onerror="this.classList.add('error')" />
-      <span class="nav-logo-name"><span class="brand">YRGN</span><span class="sub">store</span></span>
-    </a>
-    <a class="nav-wa" href="https://wa.me/6283166144481?text=Halo%2C%20saya%20ingin%20bertanya%20tentang%20produk" target="_blank" rel="noopener">
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <img src="Logo.png" alt="YRGNstore" onerror="this.style.display='none'"/>
+    <span class="logo-text">YRGN<span>store</span></span>
+  </a>
+  <div class="nav-right">
+    <button class="btn-icon" id="wishlistBtn" title="Wishlist" onclick="toggleWishlistPanel()">
+      <span id="wishlistIcon">♡</span>
+      <span class="cart-badge" id="wishlistBadge">0</span>
+    </button>
+    <button class="btn-icon" id="cartBtn" title="Keranjang" onclick="openCart()">
+      🛒
+      <span class="cart-badge" id="cartBadge">0</span>
+    </button>
+    <a class="btn-wa-nav" href="https://wa.me/6283166144481?text=Halo%2C%20saya%20ingin%20bertanya%20tentang%20produk" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      Chat Admin
+      <span>Chat Admin</span>
     </a>
-  </nav>
+  </div>
+</nav>
 
-  <!-- HERO -->
-  <section class="hero">
-    <h1>Produk Berkualitas<br>Harga Bersahabat</h1>
-    <p>Pembelian langsung melalui WhatsApp</p>
-  </section>
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-noise"></div>
+  <div class="hero-content">
+    <h1>Produk Berkualitas<br><em>Harga Bersahabat</em></h1>
+    <p>Pesan langsung via WhatsApp.</p>
+    <div class="hero-ctas">
+      <a href="#produk" class="btn-primary">🛍️ Lihat Produk</a>
+      <a href="https://wa.me/6283166144481" target="_blank" class="btn-outline">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--wa)"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Tanya Admin
+      </a>
+    </div>
+  </div>
+</section>
 
-  <!-- TOOLBAR -->
-  <div class="toolbar" id="produk">
+<!-- TRUST -->
+<div class="trust">
+  <div class="trust-item"><span class="ico">✅</span><span>Produk Original</span></div>
+  <div class="trust-item"><span class="ico">🚚</span><span>Pengiriman ke Seluruh Indonesia</span></div>
+</div>
+
+<!-- TOOLBAR -->
+<div class="toolbar" id="produk">
+  <div class="toolbar-inner">
     <div class="search-wrap">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <circle cx="11" cy="11" r="6"/><line x1="16.5" y1="16.5" x2="21" y2="21"/>
-      </svg>
-      <input type="text" id="searchInput" placeholder="Cari nama produk, kategori..." autocomplete="off" />
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+      <input type="text" id="searchInput" placeholder="Cari produk, kategori..." autocomplete="off"/>
     </div>
-    <div class="cat-wrap" id="catWrap"></div>
+    <div class="sort-wrap">
+      <select id="sortSelect">
+        <option value="default">Urutkan: Default</option>
+        <option value="price-asc">Harga: Termurah</option>
+        <option value="price-desc">Harga: Termahal</option>
+        <option value="name-asc">Nama: A–Z</option>
+      </select>
+    </div>
   </div>
+  <div class="cats" id="catWrap"></div>
+</div>
 
-  <!-- PRODUCTS -->
-  <section class="section">
-    <div class="section-header">
-      <h2 class="section-title">Produk Kami</h2>
-      <span class="section-count" id="countLabel"></span>
-    </div>
-    <div class="grid" id="productGrid"></div>
-    <div class="pagination hidden" id="pagination"></div>
-  </section>
-
-  <!-- CTA BANNER -->
-  <div class="banner">
-    <div class="banner-text">
-      <h2>Ada yang ingin ditanyakan?</h2>
-    </div>
-    <a class="banner-btn" href="https://wa.me/6283166144481?text=Halo%2C%20saya%20ingin%20bertanya" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      Hubungi Admin
-    </a>
+<!-- PRODUCTS -->
+<section class="section">
+  <div class="section-header">
+    <h2 class="section-title">Produk Kami</h2>
+    <span class="section-count" id="countLabel"></span>
   </div>
+  <div class="grid" id="productGrid"></div>
+  <div class="pagination hidden" id="pagination"></div>
+</section>
 
-  <!-- FOOTER -->
-  <footer>
-    <p>© <span id="year"></span> <strong>YRGN</strong> · Store</p>
-  </footer>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-center">© <span id="year"></span> YRGN store</div>
+</footer>
 
-  <!-- TOAST -->
-  <div id="toast">✓ Mengarahkan ke WhatsApp...</div>
+<!-- TOAST -->
+<div id="toast"></div>
 
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart(event)">
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-head">
+      <h3>🛒 Keranjang</h3>
+      <button class="cart-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-body" id="cartBody"></div>
+    <div class="cart-foot" id="cartFoot" style="display:none">
+      <div class="cart-summary">
+        <div class="cart-row"><span>Subtotal (<span id="cartItemCount">0</span> item)</span><span id="cartSubtotal">Rp 0</span></div>
+        <div class="cart-row"><span>Ongkir</span><span style="color:var(--stock-ok)">Ditanya via WA</span></div>
+      </div>
+      <div class="cart-total-row"><span>Total Estimasi</span><span id="cartTotal">Rp 0</span></div>
+      <button class="btn-checkout" style="margin-top:14px" onclick="checkoutWA()">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Pesan via WhatsApp
+      </button>
+      <button class="btn-continue" onclick="closeCart()">Lanjut Belanja</button>
+    </div>
+  </div>
+</div>
 
-    const ADMIN_WA  = '6283166144481';
-    const TOKO_NAMA = 'YRGNstore';
-    const PRODUCTS_PER_PAGE = 6;
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-wrap">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal" id="modalContent"></div>
+  </div>
+</div>
 
-    // === Data produk dengan ukuran tunggal "Oversize" ===
-    const products = [
-      {
-        id: 1,
-        name: 'Mukadua 1',
-        desc: 'Ada harga ada kualitas',
-        price: 115000,
-        stock: 20,                // total stok
-        category: 'Baju',
-        badgeText: '🔥 BARU',
-        img: 'MUKADUA 1.png',
-        size: 'Oversize',         // <— cukup string saja
-      },
-      {
-        id: 2,
-        name: 'Mukadua 2',
-        desc: 'Ada harga ada kualitas',
-        price: 115000,
-        stock: 20,
-        category: 'Baju',
-        badgeText: '🔥 BARU',
-        img: 'MUKADUA 2.png',
-        size: 'Oversize',
-      },
-      {
-        id: 3,
-        name: 'Krem & Putih Geometrik Life Coach',
-        desc: 'Ada harga ada kualitas',
-        price: 95000,
-        stock: 20,
-        category: 'Baju',
-        badgeText: '🔥 BARU',
-        img: 'Krem & Putih Geometrik Life Coach.png',
-        size: 'Oversize',
-      },
-    ];
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
 
-    const fmt = n => 'Rp ' + n.toLocaleString('id-ID');
+const ADMIN_WA  = '6283166144481';
+const TOKO_NAMA = 'YRGNstore';
+const PER_PAGE  = 6;
 
-    let activeCategory = 'Semua';
-    let searchQuery    = '';
-    let currentPage    = 1;
+// ── PRODUCTS DATA (STOK DINAMIS: true = Tersedia, false = Habis) ─────────
+const products = [
+  {id:1, name:'Mukadua 1', desc:'Kaos premium oversize dengan bahan adem dan nyaman dipakai.', price:115000, category:'Baju', badge:'🔥 BARU', img:'MUKADUA 1.png', size:'Oversize', inStock:true},
+  {id:2, name:'Mukadua 2', desc:'Kaos premium oversize dengan bahan adem dan nyaman dipakai.', price:115000, category:'Baju', badge:'🔥 BARU', img:'MUKADUA 2.png', size:'Oversize', inStock:false},
+  {id:3, name:'Krem & Putih Geometrik Life Coach', desc:'Desain geometrik elegan dengan motif inspiratif, cocok untuk tampilan kasual.', price:95000, category:'Baju', badge:'🔥 BARU', img:'Krem & Putih Geometrik Life Coach.png', size:'Oversize', inStock:true},
+];
 
-    function renderCategories() {
-      const cats = ['Semua', ...new Set(products.map(p => p.category))];
-      document.getElementById('catWrap').innerHTML = cats.map(cat => `
-        <button class="cat-pill ${cat === activeCategory ? 'active' : ''}" onclick="setCategory('${cat}')">${cat}</button>
-      `).join('');
-    }
+// ── STATE ──────────────────────────────────────────────
+let cart      = JSON.parse(localStorage.getItem('yrgn_cart')||'[]');
+let wishlist  = JSON.parse(localStorage.getItem('yrgn_wish')||'[]');
+let activeCategory = 'Semua';
+let searchQuery    = '';
+let sortMode       = 'default';
+let currentPage    = 1;
+let toastTimer;
 
-    function filterProducts() {
-      const q = searchQuery.toLowerCase().trim();
-      return products.filter(p => {
-        const matchCat    = activeCategory === 'Semua' || p.category === activeCategory;
-        const matchSearch = !q || p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q) || p.category.toLowerCase().includes(q);
-        return matchCat && matchSearch;
-      });
-    }
+// ── UTILS ──────────────────────────────────────────────
+const fmt = n => 'Rp '+n.toLocaleString('id-ID');
+const saveCart = () => localStorage.setItem('yrgn_cart', JSON.stringify(cart));
+const saveWish = () => localStorage.setItem('yrgn_wish', JSON.stringify(wishlist));
 
-    function renderProducts() {
-      const grid = document.getElementById('productGrid');
-      const filtered = filterProducts();
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'),2200);
+}
 
-      const totalPages = Math.ceil(filtered.length / PRODUCTS_PER_PAGE) || 1;
-      if (currentPage > totalPages) currentPage = Math.max(1, totalPages);
-      const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
-      const paged = filtered.slice(start, start + PRODUCTS_PER_PAGE);
+// ── STOCK HELPER ──────────────────────────────────────
+function getStockText(product){
+  if(product.inStock) return {text: '✅ Stok Tersedia', class: 'available'};
+  return {text: '❌ Stok Habis', class: 'out'};
+}
 
-      const total = filtered.length;
-      document.getElementById('countLabel').textContent =
-        total === 0 ? '' : (total === products.length ? `${total} produk` : `${total} dari ${products.length} produk`);
+// ── CART ───────────────────────────────────────────────
+function addToCart(id){
+  const p = products.find(x=>x.id===id);
+  if(!p) return;
+  if(!p.inStock){
+    showToast('❌ Maaf, stok produk ini sedang habis!');
+    return;
+  }
+  
+  const existing = cart.find(x=>x.id===id);
+  if(existing){
+    existing.qty++;
+  } else {
+    cart.push({id, qty:1});
+  }
+  saveCart();
+  updateCartUI();
+  showToast('✅ Ditambahkan ke keranjang!');
+  openCart();
+}
 
-      if (filtered.length === 0) {
-        grid.innerHTML = `
-          <div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted)">
-            <div style="font-size:3rem;margin-bottom:12px;">🔍</div>
-            <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:6px;color:var(--ink);">Produk tidak ditemukan</h3>
-            <p style="font-size:.9rem;line-height:1.6">Coba kata kunci lain atau pilih kategori yang berbeda.</p>
-          </div>`;
-        renderPagination(0,0);
-        return;
-      }
+function removeFromCart(id){
+  cart = cart.filter(x=>x.id!==id);
+  saveCart();
+  updateCartUI();
+  renderCartBody();
+}
 
-      const waSvg = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+function changeQty(id, delta){
+  const item = cart.find(x=>x.id===id);
+  if(!item) return;
+  const newQty = item.qty+delta;
+  if(newQty < 1) return;
+  item.qty = newQty;
+  saveCart();
+  updateCartUI();
+  renderCartBody();
+}
 
-      grid.innerHTML = paged.map(p=>{
-        // Status stok sederhana
-        const stockClass = p.stock<=0 ? 'color:#ef4444' : (p.stock<=3 ? 'color:#ca8a04' : 'color:#059669');
-        const stockText  = p.stock<=0 ? 'Stok habis' : (p.stock<=3 ? 'Stok menipis' : 'Stok tersedia');
+function updateCartUI(){
+  const total = cart.reduce((s,x)=>s+x.qty,0);
+  const badge = document.getElementById('cartBadge');
+  badge.textContent = total;
+  badge.classList.toggle('show', total>0);
+}
 
-        return `
-          <div class="card" id="card-${p.id}">
-            <div class="card-img-wrap">
-              <img src="${p.img}" alt="${p.name}" loading="lazy" />
-              <span class="badge">${p.badgeText || 'BARU'}</span>
-              <span class="cat-badge">${p.category}</span>
+function updateWishlistUI(){
+  const count = wishlist.length;
+  const badge = document.getElementById('wishlistBadge');
+  badge.textContent = count;
+  badge.classList.toggle('show', count>0);
+}
+
+function openCart(){
+  document.getElementById('cartOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  renderCartBody();
+}
+
+function closeCart(e){
+  if(e && e.target !== e.currentTarget) return;
+  if(e === undefined || e.target === document.getElementById('cartOverlay')){
+    document.getElementById('cartOverlay').classList.remove('open');
+    document.body.style.overflow='';
+  }
+}
+
+function renderCartBody(){
+  const body = document.getElementById('cartBody');
+  const foot = document.getElementById('cartFoot');
+
+  if(cart.length===0){
+    body.innerHTML=`<div class="cart-empty"><div class="ico">🛒</div><p>Keranjang kamu kosong</p></div>`;
+    foot.style.display='none';
+    return;
+  }
+
+  let subtotal = 0;
+  body.innerHTML = cart.map(item=>{
+    const p = products.find(x=>x.id===item.id);
+    if(!p) return '';
+    const lineTotal = p.price * item.qty;
+    subtotal += lineTotal;
+    return `
+      <div class="cart-item">
+        <img class="cart-item-img" src="${p.img}" alt="${p.name}" onerror="this.style.background='#ddd'"/>
+        <div class="ci-info">
+          <div class="ci-name">${p.name}</div>
+          <div class="ci-sub">${p.size} · ${p.category}</div>
+          <div class="ci-controls">
+            <div class="qty-wrap">
+              <button class="qty-btn" onclick="changeQty(${p.id},-1)">−</button>
+              <span class="qty-val">${item.qty}</span>
+              <button class="qty-btn" onclick="changeQty(${p.id},1)">+</button>
             </div>
-            <div class="card-body">
-              <div class="card-name">${p.name}</div>
-              <div class="card-desc">${p.desc}</div>
-
-              <!-- Ukuran tunggal -->
-              <div class="single-size" title="Ukuran kaos">
-                <span class="label">Ukuran</span>
-                <span class="value">${p.size || 'Oversize'}</span>
-              </div>
-
-              <div class="card-meta">
-                <span class="card-price">${fmt(p.price)}</span>
-                <span class="card-stock" style="${stockClass}">${stockText}</span>
-              </div>
-
-              <button class="btn-buy" onclick="beli(${p.id})">
-                ${waSvg} Beli via WhatsApp
-              </button>
-            </div>
+            <span class="ci-price">${fmt(lineTotal)}</span>
           </div>
-        `;
-      }).join('');
+          <button class="ci-remove" onclick="removeFromCart(${p.id})">Hapus</button>
+        </div>
+      </div>`;
+  }).join('');
 
-      renderPagination(currentPage, Math.ceil(filtered.length / PRODUCTS_PER_PAGE) || 1);
-    }
+  document.getElementById('cartItemCount').textContent = cart.reduce((s,x)=>s+x.qty,0);
+  document.getElementById('cartSubtotal').textContent = fmt(subtotal);
+  document.getElementById('cartTotal').textContent    = fmt(subtotal);
+  foot.style.display='block';
+}
 
-    function renderPagination(page,total){
-      const el = document.getElementById('pagination');
-      if(total<=1){el.classList.add('hidden');el.innerHTML='';return;}
-      el.classList.remove('hidden');
+function checkoutWA(){
+  if(cart.length===0) return;
+  let lines = cart.map(item=>{
+    const p = products.find(x=>x.id===item.id);
+    return `• *${p.name}* (${p.size}) × ${item.qty} = ${fmt(p.price*item.qty)}`;
+  }).join('\n');
+  const total = cart.reduce((s,item)=>{
+    const p = products.find(x=>x.id===item.id);
+    return s+(p?p.price*item.qty:0);
+  },0);
+  const msg = encodeURIComponent(
+    `Halo Admin ${TOKO_NAMA} 👋\n\nSaya ingin memesan:\n\n${lines}\n\n💰 Total Estimasi: ${fmt(total)}\n\nMohon konfirmasi ketersediaan dan info pengiriman. Terima kasih!`
+  );
+  showToast('Mengarahkan ke WhatsApp...');
+  setTimeout(()=>window.open(`https://wa.me/${ADMIN_WA}?text=${msg}`,'_blank','noopener'),500);
+}
 
-      const pages=[];
-      for(let i=1;i<=total;i++){ if(i===1||i===total||(i>=page-1 && i<=page+1)) pages.push(i); }
-      const withDots=[];
-      pages.forEach((p,idx)=>{ if(idx>0 && p-pages[idx-1]>1) withDots.push('...'); withDots.push(p); });
+// ── WISHLIST ───────────────────────────────────────────
+function toggleWishlist(id){
+  const idx = wishlist.indexOf(id);
+  if(idx===-1){
+    wishlist.push(id);
+    showToast('❤️ Ditambahkan ke wishlist');
+  } else {
+    wishlist.splice(idx,1);
+    showToast('💔 Dihapus dari wishlist');
+  }
+  saveWish();
+  updateWishlistUI();
+  renderProducts();
+}
 
-      const iconPrev = `<svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-      const iconNext = `<svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+function toggleWishlistPanel(){
+  if(wishlist.length===0){ showToast('Wishlist kamu kosong'); return; }
+  showToast(`❤️ ${wishlist.length} item di wishlist`);
+}
 
-      el.innerHTML =
-        `<button class="pg-btn" onclick="goPage(${page-1})" ${page===1?'disabled':''}>${iconPrev}<span>Sebelumnya</span></button>`+
-        withDots.map(p=>p==='...' ? `<span class="pg-dots">…</span>` : `<button class="pg-num ${p===page?'active':''}" onclick="goPage(${p})">${p}</button>`).join('')+
-        `<button class="pg-btn" onclick="goPage(${page+1})" ${page===total?'disabled':''}><span>Berikutnya</span>${iconNext}</button>`;
-    }
+// ── MODAL ──────────────────────────────────────────────
+function openModal(id){
+  const p = products.find(x=>x.id===id);
+  if(!p) return;
+  const isWished = wishlist.includes(id);
+  const stockInfo = getStockText(p);
+  
+  document.getElementById('modalContent').innerHTML = `
+    <div class="modal-inner">
+      <div class="modal-img-side">
+        <img src="${p.img}" alt="${p.name}" onerror="this.style.background='#ddd'"/>
+      </div>
+      <div class="modal-info">
+        <div>
+          <div class="modal-cat">${p.category}</div>
+          <div class="modal-name">${p.name}</div>
+        </div>
+        <div class="modal-price">${fmt(p.price)}</div>
+        <div class="modal-desc">${p.desc}</div>
+        <div>
+          <div class="modal-size-label">Ukuran</div>
+          <div class="modal-size-chip">${p.size}</div>
+        </div>
+        <div class="modal-stock ${stockInfo.class}">${stockInfo.text}</div>
+        <div class="modal-actions">
+          <button class="btn-cart" style="padding:13px;font-size:.95rem;border-radius:12px;width:100%;justify-content:center" onclick="addToCart(${id});closeModal()" ${!p.inStock ? 'disabled' : ''}>
+            <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            ${p.inStock ? 'Tambah ke Keranjang' : 'Stok Habis'}
+          </button>
+          <button class="btn-outline" style="border-radius:12px;padding:11px;font-size:.88rem;display:flex;align-items:center;gap:8px;justify-content:center" onclick="toggleWishlist(${id})">
+            ${isWished?'❤️ Hapus dari Wishlist':'♡ Simpan ke Wishlist'}
+          </button>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
 
-    function goPage(page){
-      currentPage = page;
-      renderProducts();
-      document.getElementById('produk').scrollIntoView({behavior:'smooth',block:'start'});
-    }
+function closeModal(e){
+  if(e && e.target.id!=='modalOverlay') return;
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
 
-    function setCategory(cat){
-      activeCategory = cat;
-      currentPage = 1;
-      renderCategories();
-      renderProducts();
-    }
+// ── RENDER ────────────────────────────────────────────
+function renderCategories(){
+  const cats = ['Semua', ...new Set(products.map(p=>p.category))];
+  document.getElementById('catWrap').innerHTML = cats.map(cat=>`
+    <button class="cat-pill ${cat===activeCategory?'active':''}" onclick="setCategory('${cat}')">${cat}</button>
+  `).join('');
+}
 
-    document.getElementById('searchInput').addEventListener('input',function(){
-      searchQuery = this.value;
-      currentPage = 1;
-      renderProducts();
-    });
+function filterProducts(){
+  const q = searchQuery.toLowerCase().trim();
+  return products.filter(p=>{
+    const matchCat = activeCategory==='Semua'||p.category===activeCategory;
+    const matchQ = !q||(p.name+p.desc+p.category).toLowerCase().includes(q);
+    return matchCat && matchQ;
+  });
+}
 
-    // Beli via WA (otomatis pakai ukuran Oversize)
-    window.beli = function(id){
-      const p = products.find(x=>x.id===id);
-      if(!p) return;
+function sortProducts(arr){
+  const copy = [...arr];
+  if(sortMode==='price-asc')   return copy.sort((a,b)=>a.price-b.price);
+  if(sortMode==='price-desc')  return copy.sort((a,b)=>b.price-a.price);
+  if(sortMode==='name-asc')    return copy.sort((a,b)=>a.name.localeCompare(b.name));
+  return copy;
+}
 
-      const msg = encodeURIComponent(
-        `Halo Admin ${TOKO_NAMA} 👋\n\n`+
-        `Saya ingin memesan:\n`+
-        `🛍️ *${p.name}*\n`+
-        `📏 Ukuran: ${p.size || 'Oversize'}\n`+
-        `🏷️ Kategori: ${p.category}\n`+
-        `💰 Harga: ${fmt(p.price)}\n\n`+
-        `Mohon informasi ketersediaan dan cara pembayarannya. Terima kasih!`
-      );
+function renderProducts(){
+  const grid = document.getElementById('productGrid');
+  const filtered = sortProducts(filterProducts());
+  const total = filtered.length;
+  const totalPages = Math.ceil(total/PER_PAGE)||1;
+  if(currentPage>totalPages) currentPage=Math.max(1,totalPages);
 
-      showToast('Mengarahkan ke WhatsApp...');
-      setTimeout(()=>{ window.open(`https://wa.me/${ADMIN_WA}?text=${msg}`,'_blank','noopener'); },500);
-    }
+  document.getElementById('countLabel').textContent =
+    total===0?'':(total===products.length?`${total} produk`:`${total} dari ${products.length} produk`);
 
-    let toastTimer;
-    function showToast(msg){
-      const t=document.getElementById('toast');
-      t.textContent='✓ '+msg;
-      t.classList.add('show');
-      clearTimeout(toastTimer);
-      toastTimer=setTimeout(()=>t.classList.remove('show'),2400);
-    }
+  if(total===0){
+    grid.innerHTML=`<div class="empty"><div class="empty-icon">🔍</div><h3>Produk tidak ditemukan</h3><p>Coba kata kunci lain atau pilih kategori berbeda</p></div>`;
+    renderPagination(0,0);
+    return;
+  }
 
-    // Init
-    renderCategories();
-    renderProducts();
-  </script>
+  const paged = filtered.slice((currentPage-1)*PER_PAGE, currentPage*PER_PAGE);
+  const waSvg=`<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+
+  grid.innerHTML = paged.map(p=>{
+    const stockInfo = getStockText(p);
+    const btnDisabled = !p.inStock;
+    return `
+    <div class="card" id="card-${p.id}">
+      <div class="card-img-wrap">
+        <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.style.background='#2a2720'"/>
+        <span class="badge">${p.badge||'BARU'}</span>
+        <div class="card-overlay">
+          <button class="overlay-btn" onclick="openModal(${p.id})">👁 Lihat Detail</button>
+          <button class="overlay-icon ${wishlist.includes(p.id)?'wishlisted':''}" onclick="toggleWishlist(${p.id})" title="${wishlist.includes(p.id)?'Hapus Wishlist':'Tambah Wishlist'}">${wishlist.includes(p.id)?'❤️':'♡'}</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div>
+          <div class="card-cat">${p.category}</div>
+          <div class="card-name">${p.name}</div>
+        </div>
+        <div class="card-desc">${p.desc}</div>
+        <div class="size-chip"><span class="lbl">Ukuran</span> ${p.size}</div>
+        <div class="card-bottom">
+          <div class="price-wrap">
+            <div class="card-price">${fmt(p.price)}</div>
+            <div class="card-stock ${stockInfo.class}">${stockInfo.text}</div>
+          </div>
+          <button class="btn-cart" onclick="addToCart(${p.id})" ${btnDisabled ? 'disabled' : ''}>
+            ${waSvg}Beli
+          </button>
+        </div>
+      </div>
+    </div>`}).join('');
+
+  renderPagination(currentPage, totalPages);
+}
+
+function renderPagination(page,total){
+  const el = document.getElementById('pagination');
+  if(total<=1){el.classList.add('hidden');el.innerHTML='';return;}
+  el.classList.remove('hidden');
+  const pages=[];
+  for(let i=1;i<=total;i++){if(i===1||i===total||(i>=page-1&&i<=page+1))pages.push(i);}
+  const withDots=[];
+  pages.forEach((p,idx)=>{if(idx>0&&p-pages[idx-1]>1)withDots.push('...');withDots.push(p);});
+  el.innerHTML=
+    `<button class="pg-btn" onclick="goPage(${page-1})" ${page===1?'disabled':''}>← Sebelumnya</button>`+
+    withDots.map(p=>p==='...'?`<span class="pg-dots">…</span>`:`<button class="pg-num ${p===page?'active':''}" onclick="goPage(${p})">${p}</button>`).join('')+
+    `<button class="pg-btn" onclick="goPage(${page+1})" ${page===total?'disabled':''}>Berikutnya →</button>`;
+}
+
+function goPage(p){currentPage=p;renderProducts();document.getElementById('produk').scrollIntoView({behavior:'smooth',block:'start'});}
+function setCategory(cat){activeCategory=cat;currentPage=1;renderCategories();renderProducts();}
+
+document.getElementById('searchInput').addEventListener('input',function(){searchQuery=this.value;currentPage=1;renderProducts();});
+document.getElementById('sortSelect').addEventListener('change',function(){sortMode=this.value;currentPage=1;renderProducts();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeCart();closeModal();}});
+
+
+// ── INIT ───────────────────────────────────────────────
+renderCategories();
+renderProducts();
+updateCartUI();
+updateWishlistUI();
+</script>
 </body>
 </html>
